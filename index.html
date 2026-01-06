@@ -251,7 +251,8 @@
             const designImg = await html2canvas(designArea, { useCORS: true, scale: 2 });
             
             // Veri Paketi: Google Sheets'e gönderilecek tüm bilgiler
-           const data = {
+          // index.html içindeki data paketini böyle güncelle:
+const data = {
     customer: document.getElementById('cName').value,
     email: email,
     phone: document.getElementById('cPhone').value,
@@ -260,8 +261,8 @@
     font: curFont,
     engravingText: document.getElementById('eText').value,
     internalNotes: document.getElementById('internalNotes').value,
-    imageData: canvasImg.toDataURL("image/jpeg", 0.8), // Müşteriye gidecek
-    adminImageData: canvasImg.toDataURL("image/jpeg", 0.8), // BURASI EKSİKTİ - Script bunu bekliyor
+    imageData: canvasImg.toDataURL("image/jpeg", 0.8),
+    adminImageData: canvasImg.toDataURL("image/jpeg", 0.8), // BU SATIRI EKLEMEN ŞART
     designOnlyPng: designImg.toDataURL("image/png")
 };
             // Verileri Google Apps Script üzerinden gönder
@@ -275,3 +276,4 @@
 </script>
 </body>
 </html>
+
