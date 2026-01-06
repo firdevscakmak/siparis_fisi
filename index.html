@@ -235,7 +235,8 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKYHhK8wp5N9gTiLfSz
     }
 
     /* Formu kaydet ve mail gönder butonunun ana fonksiyonu */
-   async function captureAndSend() {
+   async function captureAndSend() 
+   {
     const email = document.getElementById('cEmail').value;
     if(!email) { alert("Please enter Customer Email!"); return; }
 
@@ -282,6 +283,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKYHhK8wp5N9gTiLfSz
 </script>
 </body>
 </html>
+
 
 
 
