@@ -261,8 +261,8 @@ const data = {
     font: curFont,
     engravingText: document.getElementById('eText').value,
     internalNotes: document.getElementById('internalNotes').value,
-    
-   FullFormLink: canvasImg.toDataURL("image/jpeg", 0.8), // BU SATIRI EKLEMEN ŞART
+    imageData: canvasImg.toDataURL("image/jpeg", 0.8),
+    FullFormLink: canvasImg.toDataURL("image/jpeg", 0.8), // BU SATIRI EKLEMEN ŞART
     DesignPNGLink: designImg.toDataURL("image/png")
 };
             // Verileri Google Apps Script üzerinden gönder
@@ -276,5 +276,6 @@ const data = {
 </script>
 </body>
 </html>
+
 
 
