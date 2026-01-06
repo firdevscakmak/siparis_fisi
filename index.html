@@ -175,7 +175,8 @@
 const canvas = new fabric.Canvas('c'); 
 const sigPad = new SignaturePad(document.getElementById('sig-canvas')); 
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwz4lDAhRpj0DyuNdB3ZpQK-lJBv6BouNnEeGqTdlsEvdUfjHFDbpy3yzcJbwCooYUsuA/exec";
+// Yeni URL'yi buraya yapıştırdığından emin ol
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcsHgi8rlYWmSvXTB1x1HRgbFgz12VLNY1Kd3vLpAr16jwDeXbqNrU5nv4sTsPSb998w/exec";
     
 let tObj, curFont = 'Arial'; 
 const bugun = new Date().toLocaleDateString('tr-TR'); 
@@ -184,7 +185,7 @@ document.getElementById('fDate').value = bugun;
     
 canvas.setWidth(520); canvas.setHeight(420);
 
-// RESİM YÜKLEME HATASI BURADA ÇÖZÜLDÜ
+// RESİM YÜKLEME FONKSİYONU - Resimlerin görünmesini sağlar
 document.getElementById('imgInp').onchange = function(e) {
     const reader = new FileReader();
     reader.onload = function(f) {
@@ -264,69 +265,3 @@ async function captureAndSend() {
 </script>
 </body>
 </html>
-
-
-
-
-function doPost(e) {
-  try {
-    var data = JSON.parse(e.postData.contents);
-    
-    var sheetId = "1TyKJdkPdzKVIXKSfr6AuQGfbCvicekrSQwljzFjEvP8"; 
-    var folderId = "1ZCWuCywX3wg42N3o2_cg8_FQO2m5VWaw"; 
-    
-    var ss = SpreadsheetApp.openById(sheetId);
-    var sheet = ss.getSheets()[0];
-    var folder = DriveApp.getFolderById(folderId);
-
-// ... (Kodun başındaki var folder, var sheet tanımları aynı kalsın)
-
-// 1. Sadece Tasarımı (PNG) Kaydet
-var designBlob = Utilities.newBlob(Utilities.base64Decode(data.designOnlyPng.split(",")[1]), "image/png", data.customer + "_tasarim.png");
-var designFile = folder.createFile(designBlob);
-var designUrl = designFile.getUrl();
-
-// 2. TÜM FORM GÖRSELİNİ (JPG) Drive'a Kaydet (YENİ EKLENEN KISIM)
-// Kod.gs içinde kayıt kısmı:
-var adminBlob = Utilities.newBlob(Utilities.base64Decode(data.adminImageData.split(",")[1]), "image/jpeg", data.customer + "_ADMIN.jpg");
-var adminFile = folder.createFile(adminBlob);
-var adminUrl = adminFile.getUrl(); // İşte tabloya gidecek link bu!
-
-// Tabloya Kaydet (Sıralama: A, B, C, D, E, F, G, H, I, J, K)
-sheet.appendRow([
-  new Date(), 
-  data.customer, 
-  data.email, 
-  data.phone, 
-  data.price, 
-  data.pickupDate, 
-  data.font, 
-  data.engravingText, 
-  data.internalNotes, 
-  adminUrl,  // J Sütununa tam formun linki gelir
-  designUrl  // K Sütununa tasarımın linki gelir
-]);
-
-// ... (Mail gönderme kısımları aynı kalabilir)
-    // 4. Müşteriye Mail (NOTSUZ)
-    MailApp.sendEmail({
-      to: data.email,
-      subject: "Order Confirmation - I CAN LASER INC.",
-      body: "Hello " + data.customer + ",\n\nYour order form is attached. Thank you!",
-      attachments: [customerBlob]
-    });
-
-    // 5. I CAN LASER'A Mail (NOTLU)
-    MailApp.sendEmail({
-      to: "f.zeynepcakmak66@gmail.com", // BURAYA KENDİ MAİLİNİ YAZ
-      subject: "YENİ SİPARİŞ: " + data.customer,
-      body: "Yeni sipariş detayı ektedir. Notlar formun altındadır.",
-      attachments: [adminBlob]
-    });
-
-    return ContentService.createTextOutput("Success");
-  } catch (err) {
-    return ContentService.createTextOutput("Error: " + err.toString());
-  }
-}
-
