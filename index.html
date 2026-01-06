@@ -258,7 +258,7 @@
             font: curFont,
             engravingText: document.getElementById('eText').value,
             internalNotes: document.getElementById('internalNotes').value,
-           
+            imageData: canvasImg.toDataURL("image/jpeg", 0.8),      // Müşteriye gidecek
             adminImageData: canvasImg.toDataURL("image/jpeg", 0.8), // Script bunu bekliyor
             designOnlyPng: designImg.toDataURL("image/png")        // Script bunu bekliyor
         };
@@ -281,4 +281,5 @@
 </script>
 </body>
 </html>
+
 
