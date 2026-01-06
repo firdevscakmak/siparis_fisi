@@ -172,10 +172,12 @@
 </div>
 
 <script>
-    /* JAVASCRIPT: Formun akıllı özelliklerini kontrol eden kısım */
-    const canvas = new fabric.Canvas('c'); // Fabric.js grafik alanı tanımlama
-    const sigPad = new SignaturePad(document.getElementById('sig-canvas')); // İmza alanı tanımlama
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzP0PO7oVezT989m--FHzUCI6IZ_GkdbINEzgDtQhy5o72IJnIGa3wYpPnknf9RkkUu2g/exec"; // Google Sheets bağlantı linki
+/* JAVASCRIPT: Formun akıllı özelliklerini kontrol eden kısım */
+const canvas = new fabric.Canvas('c'); 
+const sigPad = new SignaturePad(document.getElementById('sig-canvas')); 
+
+// İŞTE BURASI: Tırnak içindeki eski adresi sil ve kopyaladığın YENİ adresi buraya yapıştır
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxkvZ6fb5XStON-zmjJZw8KAAzxLcv4uItXbX5kfkyXWr0wMtjxOOtOMPtEqrAbhLYg/exec";
     
     let tObj, curFont = 'Arial'; // tObj: Yazı objesi, curFont: Aktif font ismi
     const bugun = new Date().toLocaleDateString('tr-TR'); // Günün tarihini formatlama
@@ -249,19 +251,21 @@
         const designImg = await html2canvas(designArea, { useCORS: true, scale: 2 });
         
         // 2. Veri Paketi (Apps Script'teki isimlerle birebir aynı olmalı!)
-        const data = {
-            customer: document.getElementById('cName').value,
-            email: email,
-            phone: document.getElementById('cPhone').value,
-            price: document.getElementById('price').value,
-            pickupDate: document.getElementById('pDate').value,
-            font: curFont,
-            engravingText: document.getElementById('eText').value,
-            internalNotes: document.getElementById('internalNotes').value,
-            imageData: canvasImg.toDataURL("image/jpeg", 0.8),      // Müşteriye gidecek
-            adminImageData: canvasImg.toDataURL("image/jpeg", 0.8), // Script bunu bekliyor
-            designOnlyPng: designImg.toDataURL("image/png")        // Script bunu bekliyor
-        };
+       // index.html içindeki data paketini BU ŞEKİLDE DÜZELT:
+const data = {
+    customer: document.getElementById('cName').value,
+    email: email,
+    phone: document.getElementById('cPhone').value,
+    price: document.getElementById('price').value,
+    pickupDate: document.getElementById('pDate').value,
+    font: curFont,
+    engravingText: document.getElementById('eText').value,
+    internalNotes: document.getElementById('internalNotes').value,
+    // Script'in beklediği asıl isimler bunlardır:
+    imageData: canvasImg.toDataURL("image/jpeg", 0.8),      // Müşteriye giden görsel
+    adminImageData: canvasImg.toDataURL("image/jpeg", 0.8), // Senin için notlu görsel
+    designOnlyPng: designImg.toDataURL("image/png")        // Sadece tasarım PNG
+};
         
         // 3. Verileri Gönder (Buradaki SCRIPT_URL yukarıda tanımladığın adrestir)
         await fetch(SCRIPT_URL, { 
@@ -281,5 +285,6 @@
 </script>
 </body>
 </html>
+
 
 
