@@ -54,14 +54,16 @@ button { padding: 10px 15px; font-weight: bold; cursor: pointer; border-radius: 
 
 /* YAZDIRMA AYARI (İkinci sayfaya taşmayı önler) */
 @media print {
-    .no-print { display: none !important; } /* Butonları gizle */
+    .no-print { display: none !important; }
     body { background: white !important; }
     .form-container { 
         width: 100% !important; 
         margin: 0 !important; 
         border: none !important;
         padding: 0 !important;
+        /* Eklenen kritik satır: Sayfaya sığması için hafif küçültür */
+        transform: scale(0.95); 
+        transform-origin: top center;
     }
-    /* Sayfa taşmasını önleyen kritik komut */
     html, body { height: 99%; overflow: hidden; } 
 }
