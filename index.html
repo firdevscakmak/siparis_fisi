@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <link rel="stylesheet" href="style.css">
+ 
     <meta charset="UTF-8">
+ <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>I CAN LASER - Master v4.0 Official</title>
     
@@ -101,6 +102,33 @@
 </div>
 
 <script>
+
+// RESİM SEÇME VE EKRANA GETİRME (KESİN ÇÖZÜM)
+document.getElementById('imgInp').addEventListener('change', function(e) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        fabric.Image.fromURL(event.target.result, function(img) {
+            // Resmi canvas boyutuna sığdır
+            const scale = Math.min((canvas.width * 0.95) / img.width, (canvas.height * 0.95) / img.height);
+            canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), { 
+                scaleX: scale, 
+                scaleY: scale, 
+                left: canvas.width / 2, 
+                top: canvas.height / 2, 
+                originX: 'center', 
+                originY: 'center',
+                crossOrigin: 'anonymous' 
+            });
+        });
+    };
+    if (e.target.files[0]) {
+        reader.readAsDataURL(e.target.files[0]);
+    }
+});
+
+
+
+ 
 const canvas = new fabric.Canvas('c'); 
 const sigPad = new SignaturePad(document.getElementById('sig-canvas')); 
 
@@ -194,6 +222,7 @@ async function captureAndSend() {
 </script>
 </body>
 </html>
+
 
 
 
