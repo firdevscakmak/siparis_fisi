@@ -178,9 +178,12 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzP0PO7oVezT989m--FHzUCI6IZ_GkdbINEzgDtQhy5o72IJnIGa3wYpPnknf9RkkUu2g/exec"; // Google Sheets bağlantı linki
     
     let tObj, curFont = 'Arial'; // tObj: Yazı objesi, curFont: Aktif font ismi
-    const bugun = new Date().toLocaleDateString('tr-TR'); // Günün tarihini formatlama
+    
+   window.onload = function() {
+    const bugun = new Date().toLocaleDateString('tr-TR');
     document.getElementById('oDate').value = bugun;
     document.getElementById('fDate').value = bugun;
+};
     
     canvas.setWidth(520); canvas.setHeight(420);
 
@@ -276,3 +279,4 @@ const data = {
 </script>
 </body>
 </html>
+
