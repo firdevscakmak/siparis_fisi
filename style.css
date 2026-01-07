@@ -52,45 +52,18 @@ button { padding: 10px 15px; font-weight: bold; cursor: pointer; border-radius: 
     canvas { width: 100% !important; height: auto !important; }
 }
 
-/* YAZDIRMA AYARI (İkinci sayfaya taşmayı önler) */
+/* YAZDIRMA AYARI (Kesin Çözüm) */
 @media print {
-    /* Butonları sayfadan tamamen siler ve alanı yok eder */
-    .no-print { 
-        display: none !important; 
-        visibility: hidden !important;
-        position: absolute !important; 
-        top: -9999px !important; 
-    }
-
-    body { 
-        background: white !important; 
-        margin: 0 !important; 
-        padding: 0 !important; 
-        -webkit-print-color-adjust: exact !important; /* Renkleri koru */
-    }
-
+    .no-print { display: none !important; visibility: hidden !important; position: absolute !important; top: -9999px !important; }
+    body { background: white !important; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; }
     .form-container { 
         width: 100% !important; 
         margin: 0 !important; 
-        border: none !important; /* Kenarlığı silebilirsin ya da 1px yapabilirsin */
+        border: none !important; 
         padding: 0 !important;
-        transform: scale(0.80); /* Küçültme oranını %90'a çektik */
+        transform: scale(0.80); /* Sığması için %80 oranında küçültüldü */
         transform-origin: top center;
     }
-
-    /* Sayfalar arası boşluğu ve ikinci sayfayı zorla engeller */
-    @page {
-        size: auto;
-        margin: 0mm;
-    }
-    
-    html, body { 
-        height: 100%; 
-        overflow: hidden; 
-        page-break-after: avoid;
-    }
+    @page { size: auto; margin: 0mm; }
+    html, body { height: 100%; overflow: hidden; page-break-after: avoid; }
 }
-
-
-
-
