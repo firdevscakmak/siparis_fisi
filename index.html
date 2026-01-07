@@ -104,12 +104,12 @@
 <script> 
 const canvas = new fabric.Canvas('c'); 
 const sigPad = new SignaturePad(document.getElementById('sig-canvas'));
- // RESİM SEÇME VE EKRANA GETİRME (KESİN ÇÖZÜM)
+// RESİM YÜKLEME VE EKRANA GETİRME (KESİN ÇÖZÜM)
 document.getElementById('imgInp').addEventListener('change', function(e) {
     const reader = new FileReader();
     reader.onload = function(event) {
         fabric.Image.fromURL(event.target.result, function(img) {
-            // Resmi canvas boyutuna sığdır
+            // Resmi canvas boyutuna en uygun şekilde sığdırır
             const scale = Math.min((canvas.width * 0.95) / img.width, (canvas.height * 0.95) / img.height);
             canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), { 
                 scaleX: scale, 
@@ -122,11 +122,10 @@ document.getElementById('imgInp').addEventListener('change', function(e) {
             });
         });
     };
-    if (e.target.files[0]) {
+    if (e.target.files && e.target.files[0]) {
         reader.readAsDataURL(e.target.files[0]);
     }
 });
-
 
 // Yeni URL'yi buraya yapıştırdığından emin ol
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcsHgi8rlYWmSvXTB1x1HRgbFgz12VLNY1Kd3vLpAr16jwDeXbqNrU5nv4sTsPSb998w/exec";
@@ -218,6 +217,7 @@ async function captureAndSend() {
 </script>
 </body>
 </html>
+
 
 
 
