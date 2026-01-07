@@ -101,9 +101,10 @@
     </div>
 </div>
 
-<script>
-
-// RESİM SEÇME VE EKRANA GETİRME (KESİN ÇÖZÜM)
+<script> 
+const canvas = new fabric.Canvas('c'); 
+const sigPad = new SignaturePad(document.getElementById('sig-canvas'));
+ // RESİM SEÇME VE EKRANA GETİRME (KESİN ÇÖZÜM)
 document.getElementById('imgInp').addEventListener('change', function(e) {
     const reader = new FileReader();
     reader.onload = function(event) {
@@ -126,11 +127,6 @@ document.getElementById('imgInp').addEventListener('change', function(e) {
     }
 });
 
-
-
- 
-const canvas = new fabric.Canvas('c'); 
-const sigPad = new SignaturePad(document.getElementById('sig-canvas')); 
 
 // Yeni URL'yi buraya yapıştırdığından emin ol
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcsHgi8rlYWmSvXTB1x1HRgbFgz12VLNY1Kd3vLpAr16jwDeXbqNrU5nv4sTsPSb998w/exec";
@@ -222,6 +218,7 @@ async function captureAndSend() {
 </script>
 </body>
 </html>
+
 
 
 
