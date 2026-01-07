@@ -10,82 +10,11 @@
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Oregano&family=Playball&family=Great+Vibes&family=Pacifico&family=Cinzel:wght@700&display=Alex+Brush&display=swap" rel="stylesheet">  
+    
     <link href="https://fonts.googleapis.com/css2?family=Ranchers&display=swap" rel="stylesheet">
 
-    <style>
-    /* CSS Bölümü: Formun görsel düzeni, renkleri ve bilgisayar/telefon ekranlarına uyumu */
-    body { font-family: 'Times New Roman', serif; background: #e0e0e0; display: flex; flex-direction: column; align-items: center; padding: 0; margin: 0; }
-    
-    /* Formun beyaz ana kutusu (A4 boyutuna yakın ayarlanmıştır) */
-    .form-container { width: 790px; background: white; padding: 25px; border: 2px solid #000; box-sizing: border-box; margin-top: 20px; }
-    
-    /* Müşteri bilgileri satır düzeni */
-    .row { display: flex; gap: 15px; margin-top: 10px; }
-    .field { flex: 1; display: flex; align-items: baseline; border-bottom: 1px solid #000; }
-    .field label { font-weight: bold; margin-right: 10px; font-size: 14px; white-space: nowrap; }
-    .field input { border: none; width: 100%; outline: none; font-size: 16px; background: transparent; }
-    
-    /* Orta panel: Tasarım alanı (sol) ve Font listesi (sağ) yerleşimi */
-    .main-layout { display: flex; margin-top: 15px; border: 2px solid #000; }
-    .left-panel { flex: 2; border-right: 2px solid #000; }
-    
-    /* Metin yazma alanı ve tasarım kutusu */
-    .engraving-box { background: #f9f9f9; border-bottom: 2px solid #000; padding: 8px; text-align: center; }
-    .engraving-box textarea { width: 95%; height: 50px; font-size: 20px; font-weight: bold; border: none; background: transparent; resize: none; text-align: center; }
-    .canvas-wrap { position: relative; height: 420px; background: #fff; }
-    
-    /* Yazı tipi (Font) seçim listesinin stil ayarları */
-    .font-wrap { flex: 1; padding: 10px; background: #fff; height: 480px; overflow-y: auto; }
-    .font-item { padding: 10px; cursor: pointer; color: #777; font-size: 16px; border-bottom: 1px solid #eee; transition: 0.3s; }
-    .font-item.selected { color: #000; font-weight: bold; background: #f0f0f0; border-left: 5px solid #d32f2f; }
-    
-    /* İmza alanı ve alt bilgilendirme notu */
-    .notice { font-size: 10px; border-top: 2px solid #000; padding-top: 8px; margin-top: 15px; line-height: 1.3; }
-    .sig-area { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 15px; }
-    #sig-canvas { border-bottom: 1px solid #000; width: 180px; height: 60px; }
-    
-    /* Üst menü (Yazdır ve Kaydet butonları) - Yazıcıda görünmez */
-    .no-print { width: 100%; background: #333; padding: 10px; display: flex; justify-content: center; gap: 10px; position: sticky; top: 0; z-index: 1000; flex-wrap: wrap; }
-    button { padding: 10px 15px; font-weight: bold; cursor: pointer; border-radius: 5px; border: none; }
-    .btn-save { background: #d32f2f; color: white; }
-    .hide-from-mail { display: none !important; }
-
-    /* Özel Fontlar: Sunucundaki font dosyalarını isimlendirip sisteme tanıtır */
-    @font-face { font-family: 'Wished Lovely'; src: url('fonts/WishedLovely.ttf') format('truetype'); }
-    @font-face { font-family: 'Playball'; src: url('fonts/Playball.ttf') format('truetype'); }
-    @font-face { font-family: 'Oregano'; src: url('fonts/Oregano-Regular.ttf') format('truetype'); }
-    @font-face { font-family: 'LCALLIG_Local'; src: url('fonts/LCALLIG.TTF') format('truetype'); }
-    @font-face { font-family: 'ALGER'; src: url('fonts/ALGER.ttf') format('truetype'); }
-    @font-face { font-family: 'ALS Script'; src: url('fonts/ALSScript.ttf') format('truetype'); }
-
-/* Mobil Uyumluluk: Ekran küçüldüğünde her şeyi tam sığdırır */
-@media screen and (max-width: 800px) {
-    .form-container { 
-        width: 100% !important; 
-        border: none !important; 
-        padding: 10px !important; 
-        box-sizing: border-box; 
-    }
-    .row { flex-direction: column; gap: 5px; }
-    .main-layout { flex-direction: column; border: none; }
-    .left-panel { width: 100% !important; border-right: none !important; }
-    
-    /* Tasarım alanının mobilde dışarı taşmasını engeller */
-    .canvas-wrap { 
-        width: 100% !important; 
-        height: auto !important; 
-        min-height: 300px;
-        overflow: hidden; 
-    }
-    /* Çizim alanının kendisini ekrana hapseder */
-    canvas { 
-        width: 100% !important; 
-        height: auto !important; 
-        max-width: 100vw; 
-    }
-}
-    
-    </style>
+// StyleCSS olarak dosya ayırdık ve githuba yükledik   
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -265,3 +194,7 @@ async function captureAndSend() {
 </script>
 </body>
 </html>
+
+
+
+
