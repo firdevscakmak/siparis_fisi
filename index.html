@@ -3,124 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>I CAN LASER - Master v4.0 Official</title>
-    
-    <link rel="stylesheet" href="style.css">
+    <title>I CAN LASER - Master v4.0</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+    
+    <style>
+        /* TASARIM (Senin Dondurduğumuz CSS) */
+        body { font-family: 'Times New Roman', serif; background: #e0e0e0; display: flex; flex-direction: column; align-items: center; padding: 0; margin: 0; }
+        .form-container { width: 790px; background: white; padding: 25px; border: 2px solid #000; box-sizing: border-box; margin-top: 20px; }
+        .row { display: flex; gap: 15px; margin-top: 10px; }
+        .field { flex: 1; display: flex; align-items: baseline; border-bottom: 1px solid #000; }
+        .field label { font-weight: bold; margin-right: 10px; font-size: 14px; white-space: nowrap; }
+        .field input { border: none; width: 100%; outline: none; font-size: 16px; background: transparent; }
+        .main-layout { display: flex; margin-top: 15px; border: 2px solid #000; }
+        .left-panel { flex: 2; border-right: 2px solid #000; }
+        .engraving-box { background: #f9f9f9; border-bottom: 2px solid #000; padding: 8px; text-align: center; }
+        .engraving-box textarea { width: 95%; height: 50px; font-size: 20px; font-weight: bold; border: none; background: transparent; resize: none; text-align: center; }
+        .canvas-wrap { position: relative; height: 420px; background: #fff; }
+        .font-wrap { flex: 1; padding: 10px; background: #fff; height: 480px; overflow-y: auto; }
+        .font-item { padding: 10px; cursor: pointer; color: #777; font-size: 16px; border-bottom: 1px solid #eee; transition: 0.3s; }
+        .font-item.selected { color: #000; font-weight: bold; background: #f0f0f0; border-left: 5px solid #d32f2f; }
+        .sig-area { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 15px; }
+        #sig-canvas { border-bottom: 1px solid #000; width: 180px; height: 60px; }
+        .no-print { width: 100%; background: #333; padding: 10px; display: flex; justify-content: center; gap: 10px; position: sticky; top: 0; z-index: 1000; }
+        button { padding: 10px 15px; font-weight: bold; cursor: pointer; border-radius: 5px; }
+
+        @media screen and (max-width: 800px) {
+            .form-container { width: 100% !important; padding: 10px !important; }
+            .row { flex-direction: column; }
+            .main-layout { flex-direction: column; }
+            .canvas-wrap { width: 100% !important; height: 350px; }
+        }
+
+        @media print {
+            .no-print { display: none !important; }
+            .form-container { width: 100% !important; transform: scale(0.85); transform-origin: top center; }
+        }
+    </style>
 </head>
 <body>
 
 <div class="no-print">
-    <button onclick="window.print()" style="background:white;">1. ONLY PRINT</button>
-    <button class="btn-save" id="saveBtn" onclick="captureAndSend()">2. SAVE & MAIL FORM</button>
+    <button onclick="window.print()">PRINT</button>
+    <button onclick="captureAndSend()" id="saveBtn" style="background:#d32f2f; color:white;">SAVE & MAIL</button>
     <input type="file" id="imgInp" accept="image/*">
 </div>
 
 <div id="capture-area" class="form-container">
-    <div style="text-align: center; margin-bottom: 15px;">
-        <img src="ICANLaser_logo.jpg" alt="I CAN LASER" style="width: 100%; max-width: 300px; height: auto; display: block; margin: 0 auto;">
-    </div>
-
+    <div style="text-align: center;"><img src="ICANLaser_logo.jpg" style="max-width:250px;"></div>
+    
     <div class="row">
-        <div class="field" style="flex:2"><label>Customer:</label><input type="text" id="cName"></div>
+        <div class="field"><label>Customer:</label><input type="text" id="cName"></div>
         <div class="field"><label>Date:</label><input type="text" id="oDate" readonly></div>
     </div>
 
     <div class="main-layout">
         <div class="left-panel">
             <div class="engraving-box">
-                <textarea id="eText" oninput="updateCanvas()" placeholder="ENTER TEXT HERE"></textarea>
-                <div style="text-align: right; padding-right: 10px; margin-top: -5px;">
-                    <label style="font-size: 14px; font-weight: bold;">
-                        <input type="checkbox" id="textColorWhite" onchange="updateCanvas()"> White Text
-                    </label>
-                </div>
+                <textarea id="eText" oninput="updateCanvas()" placeholder="TEXT HERE"></textarea>
+                <input type="checkbox" id="textColorWhite" onchange="updateCanvas()"> White
             </div>
             <div class="canvas-wrap"><canvas id="c"></canvas></div>
         </div>
-        
-        <div class="font-wrap">
-            <strong style="display:block; margin-bottom:10px;">SELECT FONT:</strong>
-            <div id="fList">
-               <div class="font-item" onclick="setFont('Times New Roman',this)">1. Times New Roman</div>
-               <div class="font-item" onclick="setFont('Oregano',this)">2. Oregano</div>
-               <div class="font-item" onclick="setFont('Playball',this)">3. Playball</div>
-               <div class="font-item" onclick="setFont('Wished Lovely',this)">4. Wished Lovely</div>
-               <div class="font-item" onclick="setFont('LCALLIG_Local',this)">5. Lucida Calligraphy</div>
-               <div class="font-item" onclick="setFont('ALS Script',this)">6. ALS Script</div>
-            </div>
+        <div class="font-wrap" id="fList">
+            <div class="font-item" onclick="setFont('Times New Roman',this)">Times New Roman</div>
+            <div class="font-item" onclick="setFont('Arial',this)">Arial</div>
+            <div class="font-item" onclick="setFont('Courier New',this)">Courier New</div>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="field"><label>Price $:</label><input type="text" id="price"></div>
-        <div class="field"><label>Pickup:</label><input type="date" id="pDate"></div>
     </div>
 
     <div class="sig-area">
-        <div class="field"><label>Customer Signature:</label><canvas id="sig-canvas"></canvas></div>
-        <div style="text-align: right; flex: 1;">
-            <p style="margin:0; font-family:serif; font-size:20px; font-weight:bold;">I CAN LASER INC.</p>
-            <div class="field" style="margin-top:5px;"><label>Date:</label><input type="text" id="fDate" readonly></div>
-        </div>
+        <div class="field"><label>Signature:</label><canvas id="sig-canvas"></canvas></div>
+        <div class="field" style="text-align:right;"><label>Date:</label><input type="text" id="fDate" readonly></div>
     </div>
 </div>
 
 <script>
-// Değişkenleri tanımla
 let canvas, sigPad, tObj, curFont = 'Times New Roman';
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcsHgi8rlYWmSvXTB1x1HRgbFgz12VLNY1Kd3vLpAr16jwDeXbqNrU5nv4sTsPSb998w/exec";
 
-// Tarayıcı hazır olduğunda başlat
-document.addEventListener("DOMContentLoaded", function() {
-    console.log("Sistem başlatılıyor...");
-    
-    // Canvas kurulumu
+// SİSTEMİ BAŞLATMA
+function init() {
     canvas = new fabric.Canvas('c');
-    canvas.setWidth(520);
+    canvas.setWidth(document.querySelector('.canvas-wrap').offsetWidth);
     canvas.setHeight(420);
     
-    // İmza kurulumu
     sigPad = new SignaturePad(document.getElementById('sig-canvas'));
-
-    // Tarihler
+    
     const bugun = new Date().toLocaleDateString('tr-TR');
     document.getElementById('oDate').value = bugun;
     document.getElementById('fDate').value = bugun;
 
-    // RESİM YÜKLEME
     document.getElementById('imgInp').addEventListener('change', function(e) {
-        console.log("Resim dosyası algılandı.");
-        const file = e.target.files[0];
-        if (!file) return;
-        
         const reader = new FileReader();
         reader.onload = function(f) {
             fabric.Image.fromURL(f.target.result, function(img) {
                 const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
                 canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
-                    scaleX: scale, scaleY: scale, left: 260, top: 210, originX: 'center', originY: 'center'
+                    scaleX: scale, scaleY: scale, left: canvas.width/2, top: canvas.height/2, originX:'center', originY:'center'
                 });
-                console.log("Resim yüklendi.");
             });
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(e.target.files[0]);
     });
-});
+}
+
+// Fabric.js yüklenene kadar bekle
+let checkFabric = setInterval(() => {
+    if (typeof fabric !== 'undefined') {
+        clearInterval(checkFabric);
+        init();
+    }
+}, 100);
 
 function updateCanvas() {
-    if (!canvas) return;
     const val = document.getElementById('eText').value;
     const color = document.getElementById('textColorWhite').checked ? '#FFFFFF' : '#000000';
-    
     if (!tObj) {
-        tObj = new fabric.IText(val || ' ', {
-            left: 260, top: 210, originX: 'center', originY: 'center',
-            fontSize: 40, fontFamily: curFont, fill: color, textAlign: 'center'
-        });
+        tObj = new fabric.IText(val || ' ', { left: 100, top: 100, fontSize: 40, fontFamily: curFont, fill: color });
         canvas.add(tObj);
     } else {
         tObj.set({ text: val, fontFamily: curFont, fill: color });
@@ -132,12 +134,7 @@ function setFont(f, el) {
     curFont = f;
     document.querySelectorAll('.font-item').forEach(x => x.classList.remove('selected'));
     el.classList.add('selected');
-    if (tObj) {
-        tObj.set('fontFamily', f);
-        canvas.renderAll();
-    } else {
-        updateCanvas();
-    }
+    if (tObj) { tObj.set('fontFamily', f); canvas.renderAll(); }
 }
 
 async function captureAndSend() {
@@ -154,7 +151,7 @@ async function captureAndSend() {
         await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
         alert("Success!");
     } catch (err) { alert("Error: " + err); }
-    btn.innerText = "2. SAVE & MAIL FORM"; btn.disabled = false;
+    btn.innerText = "SAVE & MAIL"; btn.disabled = false;
 }
 </script>
 </body>
