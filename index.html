@@ -105,12 +105,32 @@
 const canvas = new fabric.Canvas('c'); 
 const sigPad = new SignaturePad(document.getElementById('sig-canvas'));
 // RESİM YÜKLEME VE EKRANA GETİRME (KESİN ÇÖZÜM)
-document.getElementById('imgInp').addEventListener('change', function(e) {
+// index.html içindeki resim yükleme fonksiyonunu bununla değiştir:
+const imgInput = document.getElementById('imgInp');
+
+imgInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Telefonlarda bellek hatasını önlemek için dosya tipini kontrol et
+    if (!file.type.startsWith('image/')) {
+        alert("Lütfen geçerli bir resim dosyası seçin.");
+        return;
+    }
+
     const reader = new FileReader();
+    
+    // Okuma başladığında kullanıcıya bilgi ver (Hata ayıklama için)
+    console.log("Resim okunuyor: " + file.name);
+
     reader.onload = function(event) {
-        fabric.Image.fromURL(event.target.result, function(img) {
-            // Resmi canvas boyutuna en uygun şekilde sığdırır
+        const imgData = event.target.result;
+        
+        // Fabric.js ile resmi yükle
+        fabric.Image.fromURL(imgData, function(img) {
+            // Resmi canvasa sığdır
             const scale = Math.min((canvas.width * 0.95) / img.width, (canvas.height * 0.95) / img.height);
+            
             canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), { 
                 scaleX: scale, 
                 scaleY: scale, 
@@ -118,15 +138,21 @@ document.getElementById('imgInp').addEventListener('change', function(e) {
                 top: canvas.height / 2, 
                 originX: 'center', 
                 originY: 'center',
+                // Mobil cihazlarda 'crossOrigin' bazen yüklemeyi engeller, 'anonymous' olarak dene
                 crossOrigin: 'anonymous' 
             });
+            
+            // Telefon ekranını zorla tazelemek için
+            canvas.requestRenderAll();
         });
     };
-    if (e.target.files && e.target.files[0]) {
-        reader.readAsDataURL(e.target.files[0]);
-    }
-});
 
+    reader.onerror = function() {
+        alert("Resim okunurken bir hata oluştu.");
+    };
+
+    reader.readAsDataURL(file);
+});
 // Yeni URL'yi buraya yapıştırdığından emin ol
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcsHgi8rlYWmSvXTB1x1HRgbFgz12VLNY1Kd3vLpAr16jwDeXbqNrU5nv4sTsPSb998w/exec";
     
@@ -217,6 +243,7 @@ async function captureAndSend() {
 </script>
 </body>
 </html>
+
 
 
 
