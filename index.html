@@ -10,8 +10,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Oregano&family=Playball&family=Great+Vibes&family=Pacifico&family=Cinzel:wght@700&display=swap" rel="stylesheet">  
 </head>
 <body>
 
@@ -30,11 +28,6 @@
         <div class="field" style="flex:2"><label>Customer:</label><input type="text" id="cName"></div>
         <div class="field"><label>Date:</label><input type="text" id="oDate" readonly></div>
     </div>
-    
-    <div class="row">
-        <div class="field"><label>Phone:</label><input type="text" id="cPhone" placeholder="(000) 000-0000"></div>
-        <div class="field"><label>Email:</label><input type="email" id="cEmail"></div>
-    </div>
 
     <div class="main-layout">
         <div class="left-panel">
@@ -52,12 +45,12 @@
         <div class="font-wrap">
             <strong style="display:block; margin-bottom:10px;">SELECT FONT:</strong>
             <div id="fList">
-               <div class="font-item" style="font-family:'Times New Roman'" onclick="setFont('Times New Roman',this)">1. Times New Roman</div>
-               <div class="font-item" style="font-family:'Oregano'" onclick="setFont('Oregano',this)">2. Oregano</div>
-               <div class="font-item" style="font-family:'Playball'" onclick="setFont('Playball',this)">3. Playball</div>
-               <div class="font-item" style="font-family:'Wished Lovely'" onclick="setFont('Wished Lovely',this)">4. Wished Lovely</div>
-               <div class="font-item" style="font-family:'LCALLIG_Local'" onclick="setFont('LCALLIG_Local',this)">5. Lucida Calligraphy</div>
-               <div class="font-item" style="font-family:'ALS Script'" onclick="setFont('ALS Script',this)">6. ALS Script</div>
+               <div class="font-item" onclick="setFont('Times New Roman',this)">1. Times New Roman</div>
+               <div class="font-item" onclick="setFont('Oregano',this)">2. Oregano</div>
+               <div class="font-item" onclick="setFont('Playball',this)">3. Playball</div>
+               <div class="font-item" onclick="setFont('Wished Lovely',this)">4. Wished Lovely</div>
+               <div class="font-item" onclick="setFont('LCALLIG_Local',this)">5. Lucida Calligraphy</div>
+               <div class="font-item" onclick="setFont('ALS Script',this)">6. ALS Script</div>
             </div>
         </div>
     </div>
@@ -67,21 +60,9 @@
         <div class="field"><label>Pickup:</label><input type="date" id="pDate"></div>
     </div>
 
-    <div class="row">
-        <div class="field" style="border: 1px solid #000; padding: 5px; flex-direction: column; align-items: flex-start;">
-            <label style="font-size: 12px; margin-bottom: 5px; color: #d32f2f;">INTERNAL NOTES:</label>
-            <textarea id="internalNotes" style="width: 100%; height: 40px; border: none; outline: none; font-size: 14px; resize: none; background: transparent;" placeholder="Admin notu..."></textarea>
-        </div>
-    </div>
-
-    <div class="notice">
-        <strong>Terms:</strong> Items left over 90 days will be disposed of. I CAN LASER INC. is not liable for loss or damage. Laser engraving is permanent.
-    </div>
-
     <div class="sig-area">
         <div class="field"><label>Customer Signature:</label><canvas id="sig-canvas"></canvas></div>
         <div style="text-align: right; flex: 1;">
-            <p style="margin:0; font-weight: bold; font-size: 13px;">Served By:</p>
             <p style="margin:0; font-family:serif; font-size:20px; font-weight:bold;">I CAN LASER INC.</p>
             <div class="field" style="margin-top:5px;"><label>Date:</label><input type="text" id="fDate" readonly></div>
         </div>
@@ -89,17 +70,20 @@
 </div>
 
 <script>
-// Canvas ve Global Değişkenler
+// Değişkenleri tanımla
 let canvas, sigPad, tObj, curFont = 'Times New Roman';
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcsHgi8rlYWmSvXTB1x1HRgbFgz12VLNY1Kd3vLpAr16jwDeXbqNrU5nv4sTsPSb998w/exec";
 
-window.onload = function() {
-    // Canvas Başlatma
+// Tarayıcı hazır olduğunda başlat
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("Sistem başlatılıyor...");
+    
+    // Canvas kurulumu
     canvas = new fabric.Canvas('c');
     canvas.setWidth(520);
     canvas.setHeight(420);
-
-    // İmza Alanı
+    
+    // İmza kurulumu
     sigPad = new SignaturePad(document.getElementById('sig-canvas'));
 
     // Tarihler
@@ -107,10 +91,12 @@ window.onload = function() {
     document.getElementById('oDate').value = bugun;
     document.getElementById('fDate').value = bugun;
 
-    // RESİM YÜKLEME DİNLEYİCİSİ
+    // RESİM YÜKLEME
     document.getElementById('imgInp').addEventListener('change', function(e) {
+        console.log("Resim dosyası algılandı.");
         const file = e.target.files[0];
         if (!file) return;
+        
         const reader = new FileReader();
         reader.onload = function(f) {
             fabric.Image.fromURL(f.target.result, function(img) {
@@ -118,15 +104,18 @@ window.onload = function() {
                 canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
                     scaleX: scale, scaleY: scale, left: 260, top: 210, originX: 'center', originY: 'center'
                 });
+                console.log("Resim yüklendi.");
             });
         };
         reader.readAsDataURL(file);
     });
-};
+});
 
 function updateCanvas() {
+    if (!canvas) return;
     const val = document.getElementById('eText').value;
     const color = document.getElementById('textColorWhite').checked ? '#FFFFFF' : '#000000';
+    
     if (!tObj) {
         tObj = new fabric.IText(val || ' ', {
             left: 260, top: 210, originX: 'center', originY: 'center',
@@ -155,10 +144,10 @@ async function captureAndSend() {
     const btn = document.getElementById('saveBtn');
     btn.innerText = "SENDING..."; btn.disabled = true;
     try {
-        const canvasImg = await html2canvas(document.getElementById('capture-area'), { useCORS: true, scale: 2 });
+        const captureArea = document.getElementById('capture-area');
+        const canvasImg = await html2canvas(captureArea, { useCORS: true, scale: 2 });
         const data = {
             customer: document.getElementById('cName').value,
-            email: document.getElementById('cEmail').value,
             adminImageData: canvasImg.toDataURL("image/jpeg", 0.8),
             designOnlyPng: canvas.toDataURL("image/png")
         };
