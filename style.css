@@ -85,10 +85,11 @@ button { padding: 10px 15px; font-weight: bold; cursor: pointer; border-radius: 
     }
     
     html, body { 
-        height: 80%; 
+        height: 100%; 
         overflow: hidden; 
         page-break-after: avoid;
     }
 }
+
 
 
