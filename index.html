@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>I CAN LASER - Master v4.0 Official</title>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    
     <script src="https://unpkg.com/fabric@5.3.0/dist/fabric.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Oregano&family=Playball&family=Great+Vibes&family=Pacifico&family=Cinzel:wght@700&display=swap" rel="stylesheet">  
@@ -103,25 +104,35 @@ const sigPad = new SignaturePad(document.getElementById('sig-canvas'));
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcsHgi8rlYWmSvXTB1x1HRgbFgz12VLNY1Kd3vLpAr16jwDeXbqNrU5nv4sTsPSb998w/exec";
     
 let tObj, curFont = 'Arial'; 
-const bugun = new Date().toLocaleDateString('tr-TR'); 
-document.getElementById('oDate').value = bugun;
-document.getElementById('fDate').value = bugun;
-canvas.setWidth(520); canvas.setHeight(420);
 
-// RESİM YÜKLEME (TEK VE MOBİL UYUMLU FONKSİYON)
+// Başlangıç Ayarları
+window.onload = function() {
+    const bugun = new Date().toLocaleDateString('tr-TR'); 
+    document.getElementById('oDate').value = bugun;
+    document.getElementById('fDate').value = bugun;
+    canvas.setWidth(520); 
+    canvas.setHeight(420);
+};
+
+// 2. BASAMAK: RESİM YÜKLEME (Telefon Uyumluluğu Artırıldı)
 document.getElementById('imgInp').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (!file) return;
+    
     const reader = new FileReader();
     reader.onload = function(event) {
-        fabric.Image.fromURL(event.target.result, function(img) {
+        const data = event.target.result;
+        fabric.Image.fromURL(data, function(img) {
             const scale = Math.min((canvas.width * 0.95) / img.width, (canvas.height * 0.95) / img.height);
             canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), { 
-                scaleX: scale, scaleY: scale, left: canvas.width / 2, top: canvas.height / 2, 
-                originX: 'center', originY: 'center', crossOrigin: 'anonymous' 
+                scaleX: scale, 
+                scaleY: scale, 
+                left: canvas.width / 2, 
+                top: canvas.height / 2, 
+                originX: 'center', 
+                originY: 'center'
             });
-            canvas.requestRenderAll();
-        });
+        }, { crossOrigin: 'anonymous' });
     };
     reader.readAsDataURL(file);
 });
