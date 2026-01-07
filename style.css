@@ -53,41 +53,41 @@ button { padding: 10px 15px; font-weight: bold; cursor: pointer; border-radius: 
 }
 
 /* YAZDIRMA AYARI (İkinci sayfaya taşmayı önler) */
-/* YAZDIRMA AYARI - Kesin Çözüm */
 @media print {
-    /* Butonları ve üst menüyü tamamen yok eder */
-    .no-print, 
-    .no-print *, 
-    button, 
-    input[type="file"] { 
+    /* Butonları sayfadan tamamen siler ve alanı yok eder */
+    .no-print { 
         display: none !important; 
-        height: 0 !important; 
-        margin: 0 !important; 
-        padding: 0 !important; 
+        visibility: hidden !important;
+        position: absolute !important; 
+        top: -9999px !important; 
     }
 
     body { 
         background: white !important; 
-        padding: 0 !important; 
         margin: 0 !important; 
+        padding: 0 !important; 
+        -webkit-print-color-adjust: exact !important; /* Renkleri koru */
     }
 
     .form-container { 
         width: 100% !important; 
-        max-height: 98vh !important; /* Ekran yüksekliğini geçmesini engeller */
         margin: 0 !important; 
-        border: 2px solid #000 !important; /* Yazıcıda çerçeve görünsün */
-        padding: 10px !important;
-        transform: scale(0.92); /* Sayfaya sığması için küçültme oranını artırdık */
+        border: none !important; /* Kenarlığı silebilirsin ya da 1px yapabilirsin */
+        padding: 0 !important;
+        transform: scale(0.90); /* Küçültme oranını %90'a çektik */
         transform-origin: top center;
-        page-break-after: avoid;
-        page-break-before: avoid;
     }
 
-    /* İkinci sayfayı tamamen yasaklar */
+    /* Sayfalar arası boşluğu ve ikinci sayfayı zorla engeller */
+    @page {
+        size: auto;
+        margin: 0mm;
+    }
+    
     html, body { 
         height: 100%; 
         overflow: hidden; 
+        page-break-after: avoid;
     }
 }
 
