@@ -74,7 +74,7 @@ button { padding: 10px 15px; font-weight: bold; cursor: pointer; border-radius: 
         margin: 0 !important; 
         border: none !important; /* Kenarlığı silebilirsin ya da 1px yapabilirsin */
         padding: 0 !important;
-        transform: scale(0.90); /* Küçültme oranını %90'a çektik */
+        transform: scale(0.80); /* Küçültme oranını %90'a çektik */
         transform-origin: top center;
     }
 
@@ -90,6 +90,7 @@ button { padding: 10px 15px; font-weight: bold; cursor: pointer; border-radius: 
         page-break-after: avoid;
     }
 }
+
 
 
 
