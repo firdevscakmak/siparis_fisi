@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- 
     <meta charset="UTF-8">
- <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>I CAN LASER - Master v4.0 Official</title>
     
@@ -11,15 +10,12 @@
     <script src="https://unpkg.com/fabric@5.3.0/dist/fabric.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Oregano&family=Playball&family=Great+Vibes&family=Pacifico&family=Cinzel:wght@700&display=Alex+Brush&display=swap" rel="stylesheet">  
-    
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Oregano&family=Playball&family=Great+Vibes&family=Pacifico&family=Cinzel:wght@700&display=swap" rel="stylesheet">  
     <link href="https://fonts.googleapis.com/css2?family=Ranchers&display=swap" rel="stylesheet">
-
 </head>
 <body>
 
 <div class="no-print">
-    
     <button onclick="window.print()" style="background:white;">1. ONLY PRINT</button>
     <button class="btn-save" id="saveBtn" onclick="captureAndSend()">2. SAVE & MAIL FORM</button>
     <input type="file" id="imgInp" accept="image/*" style="color:white; font-size:12px;">
@@ -104,84 +100,35 @@
 <script> 
 const canvas = new fabric.Canvas('c'); 
 const sigPad = new SignaturePad(document.getElementById('sig-canvas'));
-// RESİM YÜKLEME VE EKRANA GETİRME (KESİN ÇÖZÜM)
-// index.html içindeki resim yükleme fonksiyonunu bununla değiştir:
-const imgInput = document.getElementById('imgInp');
-
-imgInput.addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    // Telefonlarda bellek hatasını önlemek için dosya tipini kontrol et
-    if (!file.type.startsWith('image/')) {
-        alert("Lütfen geçerli bir resim dosyası seçin.");
-        return;
-    }
-
-    const reader = new FileReader();
-    
-    // Okuma başladığında kullanıcıya bilgi ver (Hata ayıklama için)
-    console.log("Resim okunuyor: " + file.name);
-
-    reader.onload = function(event) {
-        const imgData = event.target.result;
-        
-        // Fabric.js ile resmi yükle
-        fabric.Image.fromURL(imgData, function(img) {
-            // Resmi canvasa sığdır
-            const scale = Math.min((canvas.width * 0.95) / img.width, (canvas.height * 0.95) / img.height);
-            
-            canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), { 
-                scaleX: scale, 
-                scaleY: scale, 
-                left: canvas.width / 2, 
-                top: canvas.height / 2, 
-                originX: 'center', 
-                originY: 'center',
-                // Mobil cihazlarda 'crossOrigin' bazen yüklemeyi engeller, 'anonymous' olarak dene
-                crossOrigin: 'anonymous' 
-            });
-            
-            // Telefon ekranını zorla tazelemek için
-            canvas.requestRenderAll();
-        });
-    };
-
-    reader.onerror = function() {
-        alert("Resim okunurken bir hata oluştu.");
-    };
-
-    reader.readAsDataURL(file);
-});
-// Yeni URL'yi buraya yapıştırdığından emin ol
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcsHgi8rlYWmSvXTB1x1HRgbFgz12VLNY1Kd3vLpAr16jwDeXbqNrU5nv4sTsPSb998w/exec";
     
 let tObj, curFont = 'Arial'; 
 const bugun = new Date().toLocaleDateString('tr-TR'); 
 document.getElementById('oDate').value = bugun;
 document.getElementById('fDate').value = bugun;
-    
 canvas.setWidth(520); canvas.setHeight(420);
 
-// RESİM YÜKLEME FONKSİYONU - Resimlerin görünmesini sağlar
-document.getElementById('imgInp').onchange = function(e) {
+// RESİM YÜKLEME (TEK VE MOBİL UYUMLU FONKSİYON)
+document.getElementById('imgInp').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
     const reader = new FileReader();
-    reader.onload = function(f) {
-        fabric.Image.fromURL(f.target.result, function(img) {
+    reader.onload = function(event) {
+        fabric.Image.fromURL(event.target.result, function(img) {
             const scale = Math.min((canvas.width * 0.95) / img.width, (canvas.height * 0.95) / img.height);
             canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), { 
-                scaleX: scale, scaleY: scale, left: canvas.width / 2, top: canvas.height / 2, originX: 'center', originY: 'center' 
+                scaleX: scale, scaleY: scale, left: canvas.width / 2, top: canvas.height / 2, 
+                originX: 'center', originY: 'center', crossOrigin: 'anonymous' 
             });
+            canvas.requestRenderAll();
         });
     };
-    reader.readAsDataURL(e.target.files[0]);
-};
+    reader.readAsDataURL(file);
+});
 
 function updateCanvas() {
     const val = document.getElementById('eText').value;
-    const isWhite = document.getElementById('textColorWhite').checked;
-    const color = isWhite ? '#FFFFFF' : '#000000';
-
+    const color = document.getElementById('textColorWhite').checked ? '#FFFFFF' : '#000000';
     if(!tObj) {
         tObj = new fabric.IText(val, { 
             left: 260, top: 210, originX: 'center', originY: 'center', 
@@ -209,17 +156,13 @@ function setFont(f, el) {
 async function captureAndSend() {
     const email = document.getElementById('cEmail').value;
     if(!email) { alert("Please enter Customer Email!"); return; }
-
     const btn = document.getElementById('saveBtn');
     btn.innerText = "SENDING..."; btn.disabled = true;
-
     try {
         const captureArea = document.getElementById('capture-area');
         const canvasImg = await html2canvas(captureArea, { useCORS: true, scale: 2, windowWidth: 800 });
-        
         const designArea = document.querySelector('.canvas-wrap');
         const designImg = await html2canvas(designArea, { useCORS: true, scale: 2 });
-        
         const data = {
             customer: document.getElementById('cName').value,
             email: email,
@@ -232,24 +175,11 @@ async function captureAndSend() {
             adminImageData: canvasImg.toDataURL("image/jpeg", 0.8),
             designOnlyPng: designImg.toDataURL("image/png")        
         };
-        
         await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
         alert("SUCCESS! Form saved and Email sent.");
-    } catch (err) { 
-        alert("System Error: " + err); 
-    }
+    } catch (err) { alert("System Error: " + err); }
     btn.innerText = "2. SAVE & MAIL FORM"; btn.disabled = false;
 }
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
